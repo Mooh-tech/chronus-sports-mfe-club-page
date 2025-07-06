@@ -39,10 +39,10 @@ interface CarouselItem {
   link: string;
 }
 const handleClick = (link: any) => {
-  if(link !== "#"){
-    window.location.href = link;   
+  if (link !== "#") {
+    window.location.href = link;
   }
-  
+
 }
 const props = defineProps<{
   items: CarouselItem[];
@@ -124,7 +124,7 @@ const previous = () => {
 }
 
 .club-carousel-item:nth-child(1) {
-transform: scale(0.7);
+  transform: scale(0.7);
   margin-right: -6rem;
   z-index: 2;
   margin-top: -.5rem;
@@ -165,7 +165,7 @@ transform: scale(0.7);
 }
 
 .club-carousel-item:nth-child(7) {
-transform: scale(0.7);
+  transform: scale(0.7);
   margin-left: -6rem;
   z-index: 2;
   margin-top: -.5rem;
@@ -304,20 +304,62 @@ transform: scale(0.7);
   position: relative;
   z-index: 2;
 }
+@media screen and (max-width: 991px) {
+  .club-carousel {
+    padding: .5rem 1.5rem;
+  }
+
+  .club-carousel::before {
+    margin-left: -1.25rem;
+  }
+
+  .carousel-arrow {
+    display: flex;
+
+  }
+
+  .carousel-arrow span {
+    font-size: 1rem;
+  }
+
+  .club-carousel-item-image {
+    width: 5rem;
+    height: auto;
+  }
+
+  .club-carousel-item.active {
+    width: 5rem;
+    height: auto;
+  }
+
+  .club-carousel-item.active .club-carousel-item-image {
+    width: 100%;
+    height: auto;
+  }
+
+  .club-carousel-item-description {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .club-carousel-item:nth-child(1),
+  .club-carousel-item:nth-child(2),
+  .club-carousel-item:nth-child(6),
+  .club-carousel-item:nth-child(7) {
+    display: none;
+  }
+
+
+  .club-carousel-item:nth-child(3) {
+    margin-right: -3rem;
+    transform: scale(0.8);
+    margin-top: -4rem;
+  }
+
+  .club-carousel-item:nth-child(5) {
+    margin-left: -3rem;
+    transform: scale(0.8);
+    margin-top: -4rem;
+  }
+}
 </style>
-
-
-
-
-/* Rectangle 865 */
-
-position: absolute;
-width: 1170px;
-height: 771px;
-left: 135px;
-top: 163px;
-
-/* gradient/Linear chart */
-background: linear-gradient(80.65deg, #548CFB 5.25%, rgba(117, 151, 219, 0.6) 100.74%);
-opacity: 0.2;
-border-radius: 16px;

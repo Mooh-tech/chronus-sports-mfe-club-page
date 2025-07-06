@@ -6,31 +6,34 @@
       </div>
     </div>
     <template v-else-if="cartStore.mainProduct">
-      <div class="col-4">
+      <div class="col-12 col-md-4 mb-3 mb-md-0">
         <div class="product-img">
-          <img class="img-fluid" :src="cartStore.mainProduct.image  || defaultProductImage">
+          <img class="img-fluid" :src="cartStore.mainProduct.image || defaultProductImage">
         </div>
       </div>
       <div class="col-1"></div>
-      <div class="col-7">
-        <span class="product-seller">
+      <div class="col-12 col-md-7">
+        <span class="product-seller text-center text-md-start">
           <span class="product-seller-name">CHRONUS Sports</span>
           <material-symbol>check</material-symbol>
         </span>
         <div class="row">
-          <div class="col-8">
-            <span class="product-name">{{ cartStore.mainProduct.name }}</span>
-            <span class="product-quantity">{{ cartStore.mainProduct.stock }}/{{ cartStore.mainProduct.stock }}</span>
+          <div class="col-12 col-md-8">
+            <span class="product-name text-center text-md-start">{{ cartStore.mainProduct.name }}</span>
+            <span class="product-quantity text-center text-md-start">{{ cartStore.mainProduct.stock }}/{{
+              cartStore.mainProduct.stock }}</span>
           </div>
-          <div class="col-4">
-            <span class="product-price">{{ formatCurrency(cartStore.mainProduct?.price) }}</span>
+          <div class="col-12 col-md-4">
+            <span class="product-price text-center text-md-end mt-4 mt-md-0">{{
+              formatCurrency(cartStore.mainProduct?.price)
+              }}</span>
           </div>
         </div>
         <div class="product-description" v-html="sanitizeDescription(cartStore.mainProduct.description)"></div>
         <div class="row">
-          <div class="col-4">
-            <div class="product-quantity-selector">
-              <span class="product-quantity-selector-text">Quantidade</span>
+          <div class="col-12 col-md-4">
+            <div class="product-quantity-selector text-center text-md-start">
+              <span class="product-quantity-selector-text d-block d-md-inline-block me-0 me-md-3">Quantidade</span>
               <div class="counter-container">
                 <button @click="decrement" :disabled="count <= 1" class="counter-btn">
                   -

@@ -54,10 +54,10 @@
 
         <h2>Informações de entrega</h2>
         <div class="row">
-          <div class="col-6">
+          <div class="col-12 col-md-6 mb-5 mb-md-0">
             <div class="row">
               <!-- CEP -->
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <div class="form-floating mb-3">
                   <input type="text" class="form-control"
                     :class="{ 'is-invalid': !cartStore.shippingAddress.cep && showValidationErrors }" id="cep"
@@ -97,7 +97,7 @@
           </div>
 
           <!-- Opções de entrega -->
-          <div class="col-6">
+          <div class="col-12 col-md-6 mb-4 mb-md-0">
             <div class="delivery-info">
               <h4 class="mb-3">Tipo de entrega</h4>
 
@@ -205,14 +205,14 @@
 
         <!-- Botões de ação -->
         <div class="row">
-          <div class="col-4">
+          <div class="col-12 col-md-4 mb-3 mb-md-0">
             <router-link to="/marketplace" class="chronus-btn chronus-btn-add-to-cart">
               <span>Continuar comprando</span>
             </router-link>
           </div>
-          <div class="col-8">
+          <div class="col-12 col-md-8 mb-3 mb-md-0">
             <button @click="handleCheckout" :disabled="!cartStore.canCheckout || cartStore.loading"
-              class="chronus-btn chronus-btn-view-product" :class="{ 'disabled': !cartStore.canCheckout }">
+              class="chronus-btn chronus-btn-view-product w-100" :class="{ 'disabled': !cartStore.canCheckout }">
               <span v-if="cartStore.loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
               {{ cartStore.loading ? 'Processando...' : 'Fazer pagamento' }}
             </button>
@@ -236,7 +236,7 @@ const showValidationErrors = ref(false)
 
 onMounted(async () => {
   await cartStore.fetchProducts()
-  
+
   // Se usuário estiver logado, buscar endereço
   if (authStore.isAuthenticated) {
     await cartStore.fetchUserAddress()
@@ -249,11 +249,11 @@ const handleCepInput = (event: Event) => {
   if (!target) return
 
   let valor = target.value.replace(/\D/g, '')
-  
+
   if (valor.length > 5) {
     valor = valor.substring(0, 5) + '-' + valor.substring(5, 8)
   }
-  
+
   cartStore.shippingAddress.cep = valor
 }
 
@@ -269,16 +269,16 @@ watch(() => cartStore.shippingAddress.cep, (novoCep) => {
 const handleCheckout = async () => {
   // Mostrar erros de validação se houver
   showValidationErrors.value = true
-  
+
   // Tentar fazer o checkout
   const success = await cartStore.processCheckout()
-  
+
   // Se não deu certo, manter os erros visíveis
   if (!success) {
     // Os erros já são mostrados pelo toast da store
     return
   }
-  
+
   // Se deu certo, limpar os erros
   showValidationErrors.value = false
 }
@@ -293,14 +293,15 @@ const handleCheckout = async () => {
 }
 
 .summary-line {
-   display: flex;
+  display: flex;
   justify-content: space-between;
   margin-bottom: 0.5rem;
   font-size: 1rem;
 }
-.text-muted{
+.text-muted {
   color: #eee
 }
+
 .summary-line.total {
   font-weight: 700;
   font-size: 1.25rem;
@@ -393,16 +394,19 @@ label.form-check-label {
   display: block;
   font-weight: 600;
 }
+
 .alert {
   border-radius: 0.5rem;
   background-color: #fff3cd;
   border-color: #ffeaa7;
   color: #856404;
 }
+
 .alert strong,
-.alert ul li{
+.alert ul li {
   color: #000;
 }
+
 .alert ul {
   padding-left: 1.2rem;
 }
@@ -413,6 +417,7 @@ label.form-check-label {
   cursor: not-allowed;
   pointer-events: none;
 }
+
 .cart-quantity {
   margin-right: 3rem;
 }
@@ -528,5 +533,41 @@ label.form-check-label {
   z-index: 1;
   font-weight: 700;
   font-size: 1rem;
+}
+@media screen and (max-width: 991px) {
+  .cart-list {
+    display: block;
+    text-align: center;
+  }
+
+  .cart-image {
+    margin: auto;
+    margin-bottom: 1.5rem;
+  }
+
+  .cart-description {
+    margin: 0;
+  }
+
+  .cart-quantity {
+    margin-right: 0;
+    margin-top: 1.5rem;
+  }
+
+  .cart-value {
+    display: flex;
+    margin-top: 1.5rem;
+    flex-direction: column-reverse;
+  }
+
+  .cart-value-text {
+    margin-top: 0;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .cart-value-remove {
+    margin: auto;
+  }
 }
 </style>
