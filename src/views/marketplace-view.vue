@@ -2,7 +2,6 @@
   <div class="row boxed-row">
     <div class="col-12">
       <h1>Marketplace</h1>
-      {{ cartStore.cartItemsCount }}
     </div>
     <div class="products-list col-12">
       <div class="row">
@@ -21,7 +20,8 @@
             <div class="row">
               <div class="col-6">
                 <span class="product-category">{{ cartStore.mainProduct.category }}</span>
-                <span class="product-quantity">{{ cartStore.mainProduct.available_quantity }}/{{ cartStore.mainProduct.total_quantity }}</span>
+                <span class="product-quantity">{{ cartStore.mainProduct.available_quantity }}/{{
+                  cartStore.mainProduct.total_quantity }}</span>
               </div>
               <div class="col-6">
                 <span class="product-discount">
@@ -31,7 +31,8 @@
             </div>
             <div class="row product-button-group">
               <div class="col-6">
-                <router-link to="/produto/camisa-oficial-salgueiro" class="chronus-btn chronus-btn-view-product">Ver produto</router-link>
+                <router-link to="/produto/camisa-oficial-salgueiro" class="chronus-btn chronus-btn-view-product">Ver
+                  produto</router-link>
               </div>
               <div class="col-6">
                 <button @click="addToCart" class="chronus-btn chronus-btn-add-to-cart">
