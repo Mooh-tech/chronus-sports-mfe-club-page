@@ -23,14 +23,3 @@ const clubs = ref([
   // ... mais clubes
 ]);
 </script>
-
-/* Ellipse 23 */
-
-position: absolute;
-width: 417px;
-height: 384px;
-left: 485px;
-top: 356px;
-
-background: #07749C;
-filter: blur(97.5px);

@@ -10,7 +10,7 @@
             <span class="visually-hidden">Carregando produtos...</span>
           </div>
         </div>
-        <div v-else-if="cartStore.mainProduct" class="col-4">
+        <div v-else-if="cartStore.mainProduct" class="col-12 col-md-4">
           <div class="product">
             <div class="product-img">
               <img class="img-fluid" :src="cartStore.mainProduct.image || defaultProductImage">
@@ -30,11 +30,11 @@
               </div>
             </div>
             <div class="row product-button-group">
-              <div class="col-6">
+              <div class="col-12 col-md-6 mb-4 mb-md-0">
                 <router-link to="/produto/camisa-oficial-salgueiro" class="chronus-btn chronus-btn-view-product">Ver
                   produto</router-link>
               </div>
-              <div class="col-6">
+              <div class="col-12 col-md-6">
                 <button @click="addToCart" class="chronus-btn chronus-btn-add-to-cart">
                   <material-symbol>add_shopping_cart</material-symbol>
                   <span>Adicionar</span>
