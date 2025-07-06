@@ -11,3 +11,5 @@ declare module "*.jpeg";
 declare module "*.jpg";
 
 declare module "@chronus-sports/styleguide";
+
+declare module "vue-toastification";
