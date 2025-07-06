@@ -2,20 +2,20 @@
   <div class="row boxed-row">
     <div class="col-12">
       <h1>Carrinho</h1>
-      
+
       <!-- Loading ou carrinho vazio -->
       <div v-if="cartStore.loadingProducts" class="text-center">
         <div class="spinner-border" role="status">
           <span class="visually-hidden">Carregando...</span>
         </div>
       </div>
-      
+
       <div v-else-if="cartStore.items.length === 0" class="text-center py-5">
         <h3>Seu carrinho está vazio</h3>
         <p>Adicione produtos para continuar</p>
         <router-link to="/marketplace" class="chronus-btn chronus-btn-view-product">Ver produtos</router-link>
       </div>
-      
+
       <!-- Itens do carrinho -->
       <template v-else>
         <h2>Itens selecionados</h2>
@@ -30,19 +30,13 @@
           </div>
           <div class="cart-quantity">
             <div class="counter-container">
-              <button 
-                @click="cartStore.updateQuantity(item.product.id, item.quantity - 1)" 
-                :disabled="item.quantity <= 1" 
-                class="counter-btn"
-              >
+              <button @click="cartStore.updateQuantity(item.product.id, item.quantity - 1)"
+                :disabled="item.quantity <= 1" class="counter-btn">
                 -
               </button>
               <span class="counter-display">{{ item.quantity.toString().padStart(2, '0') }}</span>
-              <button 
-                @click="cartStore.updateQuantity(item.product.id, item.quantity + 1)" 
-                :disabled="item.quantity >= 5"
-                class="counter-btn"
-              >
+              <button @click="cartStore.updateQuantity(item.product.id, item.quantity + 1)"
+                :disabled="item.quantity >= 5" class="counter-btn">
                 +
               </button>
             </div>
@@ -65,17 +59,10 @@
               <!-- CEP -->
               <div class="col-6">
                 <div class="form-floating mb-3">
-                  <input 
-                    type="text" 
-                    class="form-control" 
-                    :class="{ 'is-invalid': !cartStore.shippingAddress.cep && showValidationErrors }"
-                    id="cep" 
-                    placeholder="00000-000" 
-                    v-model="cartStore.shippingAddress.cep"
-                    @input="handleCepInput" 
-                    :disabled="cartStore.loading || cartStore.loadingShipping" 
-                    maxlength="9"
-                  >
+                  <input type="text" class="form-control"
+                    :class="{ 'is-invalid': !cartStore.shippingAddress.cep && showValidationErrors }" id="cep"
+                    placeholder="00000-000" v-model="cartStore.shippingAddress.cep" @input="handleCepInput"
+                    :disabled="cartStore.loading || cartStore.loadingShipping" maxlength="9">
                   <label for="cep">CEP*</label>
                   <div v-if="cartStore.loadingShipping" class="spinner-border spinner-border-sm mt-1" role="status">
                     <span class="visually-hidden">Calculando frete...</span>
@@ -87,93 +74,55 @@
               </div>
 
               <!-- Campos de endereço com validação visual -->
-              <commom-input 
-                v-model="cartStore.shippingAddress.logradouro" 
-                col-size="12" 
-                type="text" 
-                id="logradouro" 
-                label="Logradouro*"
-                placeholder="Rua, Avenida..." 
-                :is-disabled="cartStore.loading || cartStore.loadingShipping" 
-                :class="{ 'is-invalid': !cartStore.shippingAddress.logradouro && showValidationErrors }"
-              />
+              <commom-input v-model="cartStore.shippingAddress.logradouro" col-size="12" type="text" id="logradouro"
+                label="Logradouro*" placeholder="Rua, Avenida..."
+                :is-disabled="cartStore.loading || cartStore.loadingShipping"
+                :class="{ 'is-invalid': !cartStore.shippingAddress.logradouro && showValidationErrors }" />
 
-              <commom-input 
-                v-model="cartStore.shippingAddress.numero" 
-                col-size="12" 
-                type="text" 
-                id="numero" 
-                label="Número*"
-                placeholder="123" 
-                :is-disabled="cartStore.loading" 
-                :class="{ 'is-invalid': !cartStore.shippingAddress.numero && showValidationErrors }"
-              />
+              <commom-input v-model="cartStore.shippingAddress.numero" col-size="12" type="text" id="numero"
+                label="Número*" placeholder="123" :is-disabled="cartStore.loading"
+                :class="{ 'is-invalid': !cartStore.shippingAddress.numero && showValidationErrors }" />
 
-              <commom-input 
-                v-model="cartStore.shippingAddress.complemento" 
-                col-size="12" 
-                type="text" 
-                id="complemento"
-                label="Complemento" 
-                placeholder="Apto 45, Bloco B..." 
-                :is-disabled="cartStore.loading" 
-              />
+              <commom-input v-model="cartStore.shippingAddress.complemento" col-size="12" type="text" id="complemento"
+                label="Complemento" placeholder="Apto 45, Bloco B..." :is-disabled="cartStore.loading" />
 
-              <commom-input 
-                v-model="cartStore.shippingAddress.bairro" 
-                col-size="6" 
-                type="text" 
-                id="bairro" 
-                label="Bairro*"
-                placeholder="Centro" 
-                :is-disabled="cartStore.loading || cartStore.loadingShipping" 
-                :class="{ 'is-invalid': !cartStore.shippingAddress.bairro && showValidationErrors }"
-              />
+              <commom-input v-model="cartStore.shippingAddress.bairro" col-size="6" type="text" id="bairro"
+                label="Bairro*" placeholder="Centro" :is-disabled="cartStore.loading || cartStore.loadingShipping"
+                :class="{ 'is-invalid': !cartStore.shippingAddress.bairro && showValidationErrors }" />
 
-              <commom-input 
-                v-model="cartStore.shippingAddress.cidade" 
-                col-size="6" 
-                type="text" 
-                id="cidade" 
-                label="Cidade*"
-                placeholder="São Paulo" 
-                :is-disabled="cartStore.loading || cartStore.loadingShipping" 
-                :class="{ 'is-invalid': !cartStore.shippingAddress.cidade && showValidationErrors }"
-              />
+              <commom-input v-model="cartStore.shippingAddress.cidade" col-size="6" type="text" id="cidade"
+                label="Cidade*" placeholder="São Paulo" :is-disabled="cartStore.loading || cartStore.loadingShipping"
+                :class="{ 'is-invalid': !cartStore.shippingAddress.cidade && showValidationErrors }" />
             </div>
           </div>
-          
+
           <!-- Opções de entrega -->
           <div class="col-6">
             <div class="delivery-info">
               <h4 class="mb-3">Tipo de entrega</h4>
-              
+
               <div v-if="cartStore.shippingOptions.length === 0 && !cartStore.loadingShipping" class="text-muted">
                 Informe o CEP para calcular o frete
               </div>
-              
+
               <div v-else>
                 <div v-for="option in cartStore.shippingOptions" :key="option.id" class="form-check form-check-inline">
-                  <input 
-                    class="form-check-input" 
-                    type="radio" 
-                    :id="option.id"
-                    :value="option.id"
-                    v-model="cartStore.selectedShipping"
-                  >
+                  <input class="form-check-input" type="radio" :id="option.id" :value="option.id"
+                    v-model="cartStore.selectedShipping">
                   <label class="form-check-label" :for="option.id">
                     {{ option.name }} - R$ {{ option.price.toFixed(2).replace('.', ',') }}
                   </label>
                 </div>
-                
+
                 <span v-if="cartStore.selectedShippingOption" class="delivery-info-time mt-4 d-block">
                   <h5>Previsão de entrega</h5>
                   <span class="delivery-time">{{ cartStore.selectedShippingOption.delivery_time }} dias úteis</span>
                 </span>
-                
+
                 <span v-if="cartStore.selectedShippingOption" class="delivery-info-value mt-4 d-block">
                   <h5>Valor</h5>
-                  <span class="delivery-value">R$ {{ cartStore.selectedShippingOption.price.toFixed(2).replace('.', ',') }}</span>
+                  <span class="delivery-value">R$ {{ cartStore.selectedShippingOption.price.toFixed(2).replace('.', ',')
+                    }}</span>
                 </span>
               </div>
             </div>
@@ -184,21 +133,17 @@
         <div class="row mb-4 mt-4">
           <div class="col-12">
             <div class="form-check">
-              <input 
-                class="form-check-input" 
-                type="checkbox" 
-                id="defaultCheck1"
-                v-model="cartStore.donationChecked"
-              >
+              <input class="form-check-input" type="checkbox" id="defaultCheck1" v-model="cartStore.donationChecked">
               <label class="form-check-label" for="defaultCheck1">
                 Faça uma doação
-                <span v-if="cartStore.donationProduct"> - R$ {{ cartStore.donationProduct.price.toFixed(2).replace('.', ',') }}</span>
+                <span v-if="cartStore.donationProduct"> - R$ {{ cartStore.donationProduct.price.toFixed(2).replace('.',
+                  ',') }}</span>
                 <br>
                 Ajude seu clube do coração e concorra a prêmios
               </label>
             </div>
           </div>
-          <div class="col-12">
+          <!-- <div class="col-12">
             <div class="form-check">
               <input 
                 class="form-check-input" 
@@ -213,7 +158,7 @@
                 Mostre que é um torcedor de verdade e seja o décimo segundo jogador
               </label>
             </div>
-          </div>
+          </div> -->
         </div>
         <!-- Resumo do pedido -->
         <div class="row mb-4">
@@ -266,12 +211,8 @@
             </router-link>
           </div>
           <div class="col-8">
-            <button 
-              @click="handleCheckout"
-              :disabled="!cartStore.canCheckout || cartStore.loading"
-              class="chronus-btn chronus-btn-view-product"
-              :class="{ 'disabled': !cartStore.canCheckout }"
-            >
+            <button @click="handleCheckout" :disabled="!cartStore.canCheckout || cartStore.loading"
+              class="chronus-btn chronus-btn-view-product" :class="{ 'disabled': !cartStore.canCheckout }">
               <span v-if="cartStore.loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
               {{ cartStore.loading ? 'Processando...' : 'Fazer pagamento' }}
             </button>
