@@ -402,137 +402,133 @@ Motivo:
   };
 
   // Calcular frete via MelhorEnvio (simulação)
-  // Configuração do MelhorEnvio
-  const MELHOR_ENVIO_CONFIG = {
-    token:
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMmEwNDFlMjFhNTdjMjlmYTU2YTE5MmVlMWQyYTYyOTE5Y2IyNjJmMTQwNTJlMTFmNzI2Y2FmMzliYjMwODkxMmQyNzg4MjA4ODcwMjA5MzkiLCJpYXQiOjE3NTE3OTU2MjMuMjQ5NjY1LCJuYmYiOjE3NTE3OTU2MjMuMjQ5NjY3LCJleHAiOjE3ODMzMzE2MjMuMjM4NzM1LCJzdWIiOiI5ZjUzMjYwNy1kYWMxLTRhYWItYTA1ZS00NTNhYmU1ZjgxODIiLCJzY29wZXMiOlsic2hpcHBpbmctY2FsY3VsYXRlIiwic2hpcHBpbmctY29tcGFuaWVzIl19.AckWyeYWFwTnqcvgvJkqBmBVYo4aa32XkoTPP-ypZYVjsSY14we0l4kGyU-NsdFojmCBT7-NWEHTfIlezO1dYRcjisiDzyFwbY-iZ6Zzzvo5muLx2mdt3W9mVAULfp60Wl9VsfLctvapQyLuEqvTJgp0kaMCKuzH2-zd40v_mdwSDi4vr5VInv-pxA3gWLoWlsQ7nnSX4tG8Ck7EAYLkLd1OEzzkgAbJWs97nZUI-aYdOSY3ceYiTr1F_GBxM7KED8XfnN3N79tj8Sgs9Y6mAuXHIN0FUV3RpIZJ8EOiY5C6i8ysaGADUaXWhwBohVE2xlPlsk0_qicaf7-KrctY7HNaYmMaegs661ZBLyJOWNoD7NDTadZ9O9m7ehmdRpQWaefptzWZvEkeYSOh5-0mMe3583NPHfJHn3UXkWaWt9hn_DVoHSSOO9iI2zLvNVTFGQT8XMbGPmaVBurbcuibWeNqY5uqw88lCYRkpZWFQxxsQCiyQ3KkcfhjzDFoUAgDtYDTo-yDF6fxxoczIQfrhCsCkTvYNGY7M9cDXn8mb1-qvjd3eDCdd9Qk8CR8YK4xy-OCyxaul1eFs7LBGfrY9AdF37WbOmW7TVTgbipIAtqN-TdJm3Vx6Nl0F9BI5fP8txuQABXhXq8SjX70830uqjdCvHbytrwQQKaSvWzeon8",
-    userAgent: "ChronusSports assinaturas@moohtech.com", // Nome da sua loja + email
-    baseUrl: true
-      ? "https://sandbox.melhorenvio.com.br/api/v2/me"
-      : "https://melhorenvio.com.br/api/v2/me", // Produção
-    cepOrigem: "51021270",
-  };
+// Configuração do MelhorEnvio
+const MELHOR_ENVIO_CONFIG = {
+  token:
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMmEwNDFlMjFhNTdjMjlmYTU2YTE5MmVlMWQyYTYyOTE5Y2IyNjJmMTQwNTJlMTFmNzI2Y2FmMzliYjMwODkxMmQyNzg4MjA4ODcwMjA5MzkiLCJpYXQiOjE3NTE3OTU2MjMuMjQ5NjY1LCJuYmYiOjE3NTE3OTU2MjMuMjQ5NjY3LCJleHAiOjE3ODMzMzE2MjMuMjM4NzM1LCJzdWIiOiI5ZjUzMjYwNy1kYWMxLTRhYWItYTA1ZS00NTNhYmU1ZjgxODIiLCJzY29wZXMiOlsic2hpcHBpbmctY2FsY3VsYXRlIiwic2hpcHBpbmctY29tcGFuaWVzIl19.AckWyeYWFwTnqcvgvJkqBmBVYo4aa32XkoTPP-ypZYVjsSY14we0l4kGyU-NsdFojmCBT7-NWEHTfIlezO1dYRcjisiDzyFwbY-iZ6Zzzvo5muLx2mdt3W9mVAULfp60Wl9VsfLctvapQyLuEqvTJgp0kaMCKuzH2-zd40v_mdwSDi4vr5VInv-pxA3gWLoWlsQ7nnSX4tG8Ck7EAYLkLd1OEzzkgAbJWs97nZUI-aYdOSY3ceYiTr1F_GBxM7KED8XfnN3N79tj8Sgs9Y6mAuXHIN0FUV3RpIZJ8EOiY5C6i8ysaGADUaXWhwBohVE2xlPlsk0_qicaf7-KrctY7HNaYmMaegs661ZBLyJOWNoD7NDTadZ9O9m7ehmdRpQWaefptzWZvEkeYSOh5-0mMe3583NPHfJHn3UXkWaWt9hn_DVoHSSOO9iI2zLvNVTFGQT8XMbGPmaVBurbcuibWeNqY5uqw88lCYRkpZWFQxxsQCiyQ3KkcfhjzDFoUAgDtYDTo-yDF6fxxoczIQfrhCsCkTvYNGY7M9cDXn8mb1-qvjd3eDCdd9Qk8CR8YK4xy-OCyxaul1eFs7LBGfrY9AdF37WbOmW7TVTgbipIAtqN-TdJm3Vx6Nl0F9BI5fP8txuQABXhXq8SjX70830uqjdCvHbytrwQQKaSvWzeon8",
+  userAgent: "ChronusSports assinaturas@moohtech.com", // Nome da sua loja + email
+  baseUrl: "https://melhorenvio.com.br/api/v2/me", // Produção
+  cepOrigem: "51021270",
+};
 
   // Função para calcular frete
   const calculateShipping = async (cep: string) => {
     if (!cep || cartItemsCount.value === 0) return;
 
-    loadingShipping.value = true;
-    try {
-      const cleanCep = cep.replace(/\D/g, "");
+  loadingShipping.value = true;
+  try {
+    const cleanCep = cep.replace(/\D/g, "");
 
-      if (cleanCep.length !== 8) {
-        toast.error("CEP deve ter 8 dígitos");
-        return;
-      }
-
-      // Verificar se o token está configurado
-      if (!MELHOR_ENVIO_CONFIG.token) {
-        throw new Error("Token do MelhorEnvio não configurado");
-      }
-
-      const shippingData = {
-        from: {
-          postal_code: MELHOR_ENVIO_CONFIG.cepOrigem,
-        },
-        to: {
-          postal_code: cleanCep,
-        },
-        products: items.value.map((item) => ({
-          id: item.product.id.toString(),
-          width: 12, // Configurar dimensões reais do produto
-          height: 4,
-          length: 17,
-          weight: 0.5,
-          insurance_value: item.product.price * item.quantity,
-          quantity: item.quantity,
-        })),
-      };
-
-      console.log("Enviando dados para MelhorEnvio:", shippingData);
-
-      const response = await fetch(
-        `${MELHOR_ENVIO_CONFIG.baseUrl}/shipment/calculate`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${MELHOR_ENVIO_CONFIG.token}`,
-            "User-Agent": MELHOR_ENVIO_CONFIG.userAgent,
-          },
-          body: JSON.stringify(shippingData),
-        }
-      );
-
-      console.log("Resposta da API:", response.status);
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error("Erro da API MelhorEnvio:", errorData);
-        throw new Error(
-          `Erro ${response.status}: ${errorData.message || "Erro na API"}`
-        );
-      }
-
-      const data = await response.json();
-      console.log("Dados retornados:", data);
-
-      // Processar resposta
-      const processedOptions: ShippingOption[] = data.map((option: any) => ({
-        id: option.service_id || option.id || "unknown",
-        name: `${option.company?.name || "Transportadora"} - ${option.name}`,
-        price: parseFloat(option.price || option.custom_price || "0"),
-        delivery_time: parseInt(option.delivery_time || "0"),
-        company: option.company?.name || "Transportadora",
-      }));
-
-      const validOptions = processedOptions.filter(
-        (option) => option.price > 0 && option.delivery_time > 0
-      );
-
-      if (validOptions.length === 0) {
-        toast.warning("Nenhuma opção de frete disponível para este CEP");
-        return;
-      }
-
-      shippingOptions.value = validOptions;
-
-      // Buscar Sedex como padrão
-      const sedexOption = validOptions.find((option) =>
-        option.name.toLowerCase().includes("sedex")
-      );
-      selectedShipping.value = sedexOption
-        ? sedexOption.id
-        : validOptions[0].id;
-
-      toast.success("Frete calculado com sucesso!");
-    } catch (error) {
-      console.error("Erro ao calcular frete:", error);
-
-      // Fallback com valores simulados
-      shippingOptions.value = [
-        {
-          id: "sedex",
-          name: "Sedex",
-          price: 35,
-          delivery_time: 3,
-          company: "Correios",
-        },
-        {
-          id: "pac",
-          name: "PAC",
-          price: 25,
-          delivery_time: 7,
-          company: "Correios",
-        },
-      ];
-      selectedShipping.value = "sedex";
-      toast.warning("Erro na API. Usando valores estimados de frete.");
-    } finally {
-      loadingShipping.value = false;
+    if (cleanCep.length !== 8) {
+      toast.error("CEP deve ter 8 dígitos");
+      return;
     }
-  };
+
+    // Verificar se o token está configurado
+    if (!MELHOR_ENVIO_CONFIG.token) {
+      throw new Error("Token do MelhorEnvio não configurado");
+    }
+
+    const shippingData = {
+      from: {
+        postal_code: MELHOR_ENVIO_CONFIG.cepOrigem,
+      },
+      to: {
+        postal_code: cleanCep,
+      },
+      products: items.value.map((item) => ({
+        id: item.product.id.toString(),
+        width: 12, // Configurar dimensões reais do produto
+        height: 4,
+        length: 17,
+        weight: 0.5,
+        insurance_value: item.product.price * item.quantity,
+        quantity: item.quantity,
+      })),
+    };
+
+    //console.log("Enviando dados para MelhorEnvio:", shippingData);
+
+    const response = await fetch(
+      `${MELHOR_ENVIO_CONFIG.baseUrl}/shipment/calculate`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${MELHOR_ENVIO_CONFIG.token}`,
+          "User-Agent": MELHOR_ENVIO_CONFIG.userAgent,
+        },
+        body: JSON.stringify(shippingData),
+      }
+    );
+
+    //    console.log("Resposta da API:", response.status);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      //console.error('Erro da API MelhorEnvio:', errorData);
+      throw new Error(
+        `Erro ${response.status}: ${errorData.message || "Erro na API"}`
+      );
+    }
+
+    const data = await response.json();
+    //console.log("Dados retornados:", data);
+
+    // Processar resposta
+    const processedOptions: ShippingOption[] = data.map((option: any) => ({
+      id: option.service_id || option.id || "unknown",
+      name: `${option.company?.name || "Transportadora"} - ${option.name}`,
+      price: parseFloat(option.price || option.custom_price || "0"),
+      delivery_time: parseInt(option.delivery_time || "0"),
+      company: option.company?.name || "Transportadora",
+    }));
+
+    const validOptions = processedOptions.filter(
+      (option) => option.price > 0 && option.delivery_time > 0
+    );
+
+    if (validOptions.length === 0) {
+      toast.warning("Nenhuma opção de frete disponível para este CEP");
+      return;
+    }
+
+    shippingOptions.value = validOptions;
+
+    // Buscar Sedex como padrão
+    const sedexOption = validOptions.find((option) =>
+      option.name.toLowerCase().includes("sedex")
+    );
+    selectedShipping.value = sedexOption ? sedexOption.id : validOptions[0].id;
+
+    toast.success("Frete calculado com sucesso!");
+  } catch (error) {
+    //console.error('Erro ao calcular frete:', error);
+
+    // Fallback com valores simulados
+    shippingOptions.value = [
+      {
+        id: "sedex",
+        name: "Sedex",
+        price: 35,
+        delivery_time: 3,
+        company: "Correios",
+      },
+      {
+        id: "pac",
+        name: "PAC",
+        price: 25,
+        delivery_time: 7,
+        company: "Correios",
+      },
+    ];
+    selectedShipping.value = "sedex";
+    //toast.warning('Erro na API. Usando valores estimados de frete.');
+  } finally {
+    loadingShipping.value = false;
+  }
+};
 
   // Processar checkout
   const processCheckout = async () => {
