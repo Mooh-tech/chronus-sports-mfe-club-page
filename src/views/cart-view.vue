@@ -211,10 +211,14 @@
             </router-link>
           </div>
           <div class="col-12 col-md-8 mb-3 mb-md-0">
-            <button @click="handleCheckout" :disabled="!cartStore.canCheckout || cartStore.loading"
+            <!-- <button @click="handleCheckout" :disabled="!cartStore.canCheckout || cartStore.loading"
               class="chronus-btn chronus-btn-view-product w-100" :class="{ 'disabled': !cartStore.canCheckout }">
               <span v-if="cartStore.loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
               {{ cartStore.loading ? 'Processando...' : 'Fazer pagamento' }}
+            </button> -->
+            <button :disabled="true" class="chronus-btn chronus-btn-view-product w-100" :class="{ 'disabled': true }">
+              <span v-if="cartStore.loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+              Em Breve
             </button>
           </div>
         </div>
