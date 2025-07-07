@@ -114,10 +114,10 @@
                   </label>
                 </div>
 
-                <span v-if="cartStore.selectedShippingOption" class="delivery-info-time mt-4 d-block">
+                <!-- <span v-if="cartStore.selectedShippingOption" class="delivery-info-time mt-4 d-block">
                   <h5>Previsão de entrega</h5>
                   <span class="delivery-time">{{ cartStore.selectedShippingOption.delivery_time }} dias úteis</span>
-                </span>
+                </span> -->
 
                 <span v-if="cartStore.selectedShippingOption" class="delivery-info-value mt-4 d-block">
                   <h5>Valor</h5>
