@@ -20,8 +20,9 @@
         <div class="row">
           <div class="col-12 col-md-8">
             <span class="product-name text-center text-md-start">{{ cartStore.mainProduct.name }}</span>
-            <span class="product-quantity text-center text-md-start">{{ cartStore.mainProduct.stock }}/{{
-              cartStore.mainProduct.stock }}</span>
+            <!-- <span class="product-quantity text-center text-md-start">{{ cartStore.mainProduct.stock }}/{{
+              cartStore.mainProduct.stock }}</span> -->
+            <span class="product-quantity text-center text-md-start">0/100</span>
           </div>
           <div class="col-12 col-md-4">
             <span class="product-price text-center text-md-end mt-4 mt-md-0">{{
@@ -32,7 +33,7 @@
         <div class="product-description" v-html="sanitizeDescription(cartStore.mainProduct.description)"></div>
         <div class="row">
           <div class="col-12 col-md-4">
-            <div class="product-quantity-selector text-center text-md-start">
+            <!-- <div class="product-quantity-selector text-center text-md-start">
               <span class="product-quantity-selector-text d-block d-md-inline-block me-0 me-md-3">Quantidade</span>
               <div class="counter-container">
                 <button @click="decrement" :disabled="count <= 1" class="counter-btn">
@@ -45,8 +46,9 @@
                   +
                 </button>
               </div>
-            </div>
-            <button @click="buyNow" class="chronus-btn chronus-btn-view-product">Comprar</button>
+            </div> -->
+            <!-- <button @click="buyNow" class="chronus-btn chronus-btn-view-product">Comprar</button> -->
+            <button class="chronus-btn chronus-btn-view-product">Esgotado</button>
           </div>
         </div>
       </div>
