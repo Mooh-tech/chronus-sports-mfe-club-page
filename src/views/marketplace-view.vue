@@ -20,9 +20,8 @@
             <div class="row">
               <div class="col-6">
                 <span class="product-category">{{ cartStore.mainProduct.category }}</span>
-                <!-- <span class="product-quantity">{{ cartStore.mainProduct.available_quantity }}/{{
-                  cartStore.mainProduct.total_quantity }}</span> -->
-                <span class="product-quantity">0/100</span>
+                <span class="product-quantity">{{ cartStore.mainProduct.available_quantity }}/{{
+                  cartStore.mainProduct.total_quantity }}</span>
               </div>
               <div class="col-6">
                 <span class="product-discount">
@@ -36,14 +35,9 @@
                   produto</router-link>
               </div>
               <div class="col-12 col-md-6">
-                <!-- <button @click="addToCart" class="chronus-btn chronus-btn-add-to-cart">
+                <button @click="addToCart" class="chronus-btn chronus-btn-add-to-cart">
                   <material-symbol>add_shopping_cart</material-symbol>
                   <span>Adicionar</span>
-                </button>
-                 -->
-                <button class="chronus-btn chronus-btn-add-to-cart">
-                  <!-- <material-symbol>add_shopping_cart</material-symbol> -->
-                  <span>Esgotado</span>
                 </button>
               </div>
             </div>
