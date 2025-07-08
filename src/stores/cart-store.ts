@@ -787,7 +787,8 @@ Motivo:
   const handleCheckoutResponse = async (checkoutResult: any) => {
     try {
       // Caso 1: Stripe Checkout Session criada com sucesso
-      if (checkoutResult.success && checkoutResult.checkout_url) {
+      console.log(checkoutResult);
+      if (checkoutResult.url) {
         toast.success("Redirecionando para pagamento...");
 
         // Salvar dados do pedido temporariamente (para recuperar depois)
@@ -807,7 +808,7 @@ Motivo:
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         // Redirecionar para o Stripe Checkout
-        window.location.href = checkoutResult.checkout_url;
+        window.location.href = checkoutResult.url;
         return true;
       }
 
