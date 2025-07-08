@@ -914,13 +914,13 @@ Motivo:
     try {
       // Caso 1: Stripe Checkout Session criada com sucesso
       console.log(checkoutResult);
-      if (checkoutResult.url) {
+      if (checkoutResult.checkout_session.url) {
         toast.success("Redirecionando para pagamento...");
 
         // Salvar dados do pedido temporariamente (para recuperar depois)
         const orderData = {
-          session_id: checkoutResult.session_id,
-          order_id: checkoutResult.order_id,
+          session_id: checkoutResult.checkout_session.session_id,
+          order_id: checkoutResult.checkout_session.order_id,
           total_amount: total.value,
           items_count: items.value.length,
           created_at: new Date().toISOString(),
@@ -934,7 +934,7 @@ Motivo:
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         // Redirecionar para o Stripe Checkout
-        window.location.href = checkoutResult.url;
+        window.location.href = checkoutResult.checkout_session.url;
         return true;
       }
 
