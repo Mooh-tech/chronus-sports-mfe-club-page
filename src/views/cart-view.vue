@@ -19,7 +19,44 @@
       <!-- Itens do carrinho -->
       <template v-else>
         <h2>Itens selecionados</h2>
-        <div v-for="item in cartStore.items" :key="item.product.id" class="cart-list">
+        <div v-for="item in cartStore.items" :key="`${item.product.id}_${item.size}`" class="cart-list">
+          <div class="cart-image">
+            <img class="img-fluid" :src="item.product.image || defaultProductImage">
+          </div>
+          <div class="cart-description">
+            <span class="cart-description-title">{{ item.product.name }}</span>
+            <span v-if="item.size" class="badge bg-secondary">Tamanho: {{ item.size }}</span>
+            <span class="cart-description-type">{{ item.product.type }}</span>
+            <span class="cart-description-category">{{ item.product.category }}</span>
+          </div>
+          <div class="col-md-2">
+            <span class="cart-item-price">R$ {{ (item.product.price * item.quantity).toFixed(2).replace('.', ',')
+              }}</span>
+          </div>
+          <div class="cart-quantity">
+            <div class="counter-container">
+              <button @click="cartStore.updateQuantity(item.product.id, item.size, item.quantity - 1)"
+                :disabled="item.quantity <= 1" class="counter-btn">
+                -
+              </button>
+              <span class="counter-display">{{ item.quantity.toString().padStart(2, '0') }}</span>
+              <button @click="cartStore.updateQuantity(item.product.id, item.size, item.quantity + 1)"
+                :disabled="item.quantity >= 5" class="counter-btn">
+                +
+              </button>
+            </div>
+          </div>
+          <div class="cart-value">
+            <span class="cart-value-remove" @click="cartStore.removeFromCart(item.product.id, item.size)">
+              <material-symbol>delete</material-symbol>
+            </span>
+            <span class="cart-value-text">Preço</span>
+            <span class="cart-value-price">
+              R$ {{ (item.product.price * item.quantity).toFixed(2).replace('.', ',') }}
+            </span>
+          </div>
+        </div>
+        <!-- <div v-for="item in cartStore.items" :key="item.product.id" class="cart-list">
           <div class="cart-image">
             <img class="img-fluid" :src="item.product.image || defaultProductImage">
           </div>
@@ -50,7 +87,7 @@
               R$ {{ (item.product.price * item.quantity).toFixed(2).replace('.', ',') }}
             </span>
           </div>
-        </div>
+        </div> -->
 
         <h2>Informações de entrega</h2>
         <div class="row">
@@ -101,10 +138,13 @@
             <div class="delivery-info">
               <h4 class="mb-3">Tipo de entrega</h4>
 
-              <div v-if="cartStore.shippingOptions.length === 0 && !cartStore.loadingShipping" class="text-muted">
+              <div v-if="cartStore.shippingOptions.length === 0 && !cartStore.loadingShipping" class="text-muted"
+                style="color: #FFF">
                 Informe o CEP para calcular o frete
               </div>
-
+              <!-- <div v-else-if="cartStore.shippingAddress.cidade == 'Salgueiro'" style="color: #FFF">
+                Frete grátis
+              </div> -->
               <div v-else>
                 <div v-for="option in cartStore.shippingOptions" :key="option.id" class="form-check form-check-inline">
                   <input class="form-check-input" type="radio" :id="option.id" :value="option.id"
@@ -302,6 +342,7 @@ const handleCheckout = async () => {
   margin-bottom: 0.5rem;
   font-size: 1rem;
 }
+
 .text-muted {
   color: #eee
 }
@@ -538,6 +579,7 @@ label.form-check-label {
   font-weight: 700;
   font-size: 1rem;
 }
+
 @media screen and (max-width: 991px) {
   .cart-list {
     display: block;
