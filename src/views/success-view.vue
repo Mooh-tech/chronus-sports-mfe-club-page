@@ -2,15 +2,36 @@
   <div class="row boxed-row">
     <div class="col-12">
       <!-- Loading de verificação -->
-      <div v-if="successStore.verifying" class="text-center py-5">
+      <!-- <div v-if="successStore.verifying" class="text-center py-5">
         <div class="spinner-border text-success" role="status">
           <span class="visually-hidden">Verificando pagamento...</span>
         </div>
         <p class="mt-3">Verificando seu pagamento...</p>
+      </div> -->
+      <div class="text-center py-5">
+        <div class="">
+          <h3>Compra realizada com sucesso</h3>
+          <!-- <p>{{ successStore.errorMessage }}</p> -->
+          <div class="row">
+            <div class="col-3"></div>
+            <div class="col-3">
+              <router-link to="/marketplace" class="chronus-btn chronus-btn-view-product">
+                Ver produtos
+              </router-link>
+            </div>
+            <div class="col-3">
+              <router-link to="/" class="chronus-btn chronus-btn-add-to-cart">
+                <span>Ir para Home</span>
+              </router-link>
+            </div>
+            <div class="col-3"></div>
+          </div>
+        </div>
       </div>
-
-      <!-- Erro -->
-      <div v-else-if="!successStore.isValidSession" class="text-center py-5">
+    </div>
+  </div>
+  <!-- Erro -->
+  <!-- <div v-else-if="!successStore.isValidSession" class="text-center py-5">
         <div class="">
           <h3>Erro na Verificação</h3>
           <p>{{ successStore.errorMessage }}</p>
@@ -32,7 +53,7 @@
       </div>
 
       <!-- Sucesso -->
-      <div v-else-if="successStore.isPaymentSuccessful" class="text-center py-5">
+  <!-- <div v-else-if="successStore.isPaymentSuccessful" class="text-center py-5">
         <div class="success-header mb-4">
           <div class="success-icon">
             <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -82,10 +103,10 @@
                     <strong>Nome:</strong><br>
                     <span class="text-muted">{{ successStore.session.customer_details.name }}</span>
                   </div>
-                </div>
+                </div> -->
 
-                <!-- Detalhes do pedido -->
-                <div v-if="successStore.orderDetails" class="mt-4">
+  <!-- Detalhes do pedido -->
+  <!-- <div v-if="successStore.orderDetails" class="mt-4">
                   <h6>Itens do Pedido</h6>
                   <div class="table-responsive">
                     <table class="table table-sm">
@@ -105,10 +126,10 @@
                       </tbody>
                     </table>
                   </div>
-                </div>
+                </div> -->
 
-                <!-- Endereço de entrega -->
-                <div v-if="successStore.orderDetails?.shipping_address" class="mt-4">
+  <!-- Endereço de entrega -->
+  <!-- <div v-if="successStore.orderDetails?.shipping_address" class="mt-4">
                   <h6>Endereço de Entrega</h6>
                   <p class="text-muted small mb-0">
                     {{ successStore.orderDetails.shipping_address.name }}<br>
@@ -120,10 +141,10 @@
                     {{ successStore.orderDetails.shipping_address.state }}<br>
                     CEP: {{ successStore.orderDetails.shipping_address.postal_code }}
                   </p>
-                </div>
+                </div> -->
 
-                <!-- Assinatura -->
-                <div v-if="successStore.isSubscriptionActive" class="alert alert-info mt-4">
+  <!-- Assinatura -->
+  <!-- <div v-if="successStore.isSubscriptionActive" class="alert alert-info mt-4">
                   <h6>Assinatura Ativada!</h6>
                   <p class="mb-0">
                     Sua assinatura de Sócio Torcedor foi ativada com sucesso.
@@ -150,10 +171,10 @@
           </div>
           <div class="col-3"></div>
         </div>
-      </div>
+      </div> -->
 
-      <!-- Pagamento pendente -->
-      <div v-else class="text-center py-5">
+  <!-- Pagamento pendente -->
+  <!-- <div v-else class="text-center py-5">
         <div class="alert alert-warning">
           <h3>Pagamento Pendente</h3>
           <p>Seu pagamento está sendo processado. Aguarde a confirmação.</p>
@@ -178,9 +199,9 @@
             <div class="col-3"></div>
           </div>
         </div>
-      </div>
+      </div> 
     </div>
-  </div>
+  </div>-->
 </template>
 
 <script setup lang="ts">
