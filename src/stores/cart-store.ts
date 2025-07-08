@@ -19,11 +19,13 @@ export interface Product {
   height: number; // altura em cm
   length: number; // comprimento em cm
   weight: number; // peso em kg
+  selectedSize?: string; // ✅ Novo campo para tamanho
 }
 
 export interface CartItem {
   product: Product;
   quantity: number;
+  size: string; // ✅ Tamanho como campo separado também
 }
 
 export interface ShippingAddress {
@@ -40,7 +42,7 @@ export interface ShippingOption {
   id: string;
   name: string;
   price: number;
-  delivery_time: number;
+  delivery_time?: number;
   company: string;
 }
 
@@ -230,7 +232,7 @@ export const useCartStore = defineStore("cart", () => {
   };
 
   // Adicionar item ao carrinho
-  const addToCart = (product: Product, quantity: number = 1) => {
+  const addToCart = (product: Product, quantity: number = 1, size?: string) => {
     // Verificar se usuário está logado
     if (!authStore.isAuthenticated) {
       toast.error(
@@ -238,7 +240,10 @@ export const useCartStore = defineStore("cart", () => {
       );
       return false;
     }
-
+    if (product.type === "Camisa Oficial" && !size) {
+      toast.error("Selecione um tamanho para continuar");
+      return false;
+    }
     // Verificar limite de camisas
     if (product.type === "Camisa Oficial") {
       const newShirtTotal = shirtQuantity.value + quantity;
@@ -264,8 +269,11 @@ Motivo:
     }
 
     // Verificar se item já existe no carrinho
+    const uniqueId = size ? `${product.id}_${size}` : product.id.toString();
+
+    // Verificar se item já existe no carrinho (considerando tamanho)
     const existingItem = items.value.find(
-      (item) => item.product.id === product.id
+      (item) => item.product.id === product.id && item.size === (size || "")
     );
 
     if (existingItem) {
@@ -276,19 +284,34 @@ Motivo:
       }
       existingItem.quantity = newQuantity;
     } else {
+      // Criar produto com tamanho
+      const productWithSize: Product = {
+        ...product,
+        selectedSize: size,
+        name: size ? `${product.name} - Tamanho ${size}` : product.name,
+      };
+
       items.value.push({
-        product,
+        product: productWithSize,
         quantity: Math.min(quantity, 5),
+        size: size || "",
       });
     }
 
-    toast.success(`${product.name} adicionado ao carrinho!`);
+    const productName = size ? `${product.name} (${size})` : product.name;
+    toast.success(`${productName} adicionado ao carrinho!`);
     return true;
   };
 
   // Atualizar quantidade do item
-  const updateQuantity = (productId: number, quantity: number) => {
-    const item = items.value.find((item) => item.product.id === productId);
+  const updateQuantity = (
+    productId: number,
+    size: string,
+    quantity: number
+  ) => {
+    const item = items.value.find(
+      (item) => item.product.id === productId && item.size === size
+    );
     if (!item) return;
 
     // Verificar limites
@@ -330,14 +353,17 @@ Motivo:
   };
 
   // Remover item do carrinho
-  const removeFromCart = (productId: number) => {
+  const removeFromCart = (productId: number, size: string) => {
     const index = items.value.findIndex(
-      (item) => item.product.id === productId
+      (item) => item.product.id === productId && item.size === size
     );
     if (index !== -1) {
       const item = items.value[index];
       items.value.splice(index, 1);
-      toast.success(`${item.product.name} removido do carrinho`);
+      const productName = item.size
+        ? `${item.product.name} (${item.size})`
+        : item.product.name;
+      toast.success(`${productName} removido do carrinho`);
     }
   };
 
@@ -401,22 +427,24 @@ Motivo:
     }
   };
 
-  // Calcular frete via MelhorEnvio (simulação)
-  // Configuração do MelhorEnvio
-  const MELHOR_ENVIO_CONFIG = {
-    token:
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMmEwNDFlMjFhNTdjMjlmYTU2YTE5MmVlMWQyYTYyOTE5Y2IyNjJmMTQwNTJlMTFmNzI2Y2FmMzliYjMwODkxMmQyNzg4MjA4ODcwMjA5MzkiLCJpYXQiOjE3NTE3OTU2MjMuMjQ5NjY1LCJuYmYiOjE3NTE3OTU2MjMuMjQ5NjY3LCJleHAiOjE3ODMzMzE2MjMuMjM4NzM1LCJzdWIiOiI5ZjUzMjYwNy1kYWMxLTRhYWItYTA1ZS00NTNhYmU1ZjgxODIiLCJzY29wZXMiOlsic2hpcHBpbmctY2FsY3VsYXRlIiwic2hpcHBpbmctY29tcGFuaWVzIl19.AckWyeYWFwTnqcvgvJkqBmBVYo4aa32XkoTPP-ypZYVjsSY14we0l4kGyU-NsdFojmCBT7-NWEHTfIlezO1dYRcjisiDzyFwbY-iZ6Zzzvo5muLx2mdt3W9mVAULfp60Wl9VsfLctvapQyLuEqvTJgp0kaMCKuzH2-zd40v_mdwSDi4vr5VInv-pxA3gWLoWlsQ7nnSX4tG8Ck7EAYLkLd1OEzzkgAbJWs97nZUI-aYdOSY3ceYiTr1F_GBxM7KED8XfnN3N79tj8Sgs9Y6mAuXHIN0FUV3RpIZJ8EOiY5C6i8ysaGADUaXWhwBohVE2xlPlsk0_qicaf7-KrctY7HNaYmMaegs661ZBLyJOWNoD7NDTadZ9O9m7ehmdRpQWaefptzWZvEkeYSOh5-0mMe3583NPHfJHn3UXkWaWt9hn_DVoHSSOO9iI2zLvNVTFGQT8XMbGPmaVBurbcuibWeNqY5uqw88lCYRkpZWFQxxsQCiyQ3KkcfhjzDFoUAgDtYDTo-yDF6fxxoczIQfrhCsCkTvYNGY7M9cDXn8mb1-qvjd3eDCdd9Qk8CR8YK4xy-OCyxaul1eFs7LBGfrY9AdF37WbOmW7TVTgbipIAtqN-TdJm3Vx6Nl0F9BI5fP8txuQABXhXq8SjX70830uqjdCvHbytrwQQKaSvWzeon8",
-    userAgent: "ChronusSports assinaturas@moohtech.com", // Nome da sua loja + email
-    baseUrl: "https://melhorenvio.com.br/api/v2/me", // Produção
-    cepOrigem: "51021270",
-  };
-
   // Função para calcular frete
   const calculateShipping = async (cep: string) => {
     if (!cep || cartItemsCount.value === 0) return;
 
     loadingShipping.value = true;
     try {
+      if (shippingAddress.value.cidade == "Salgueiro") {
+        shippingOptions.value = [
+          {
+            id: "gratis",
+            name: "Frete grátis",
+            price: 0,
+            //delivery_time: 3,
+            company: "-",
+          },
+        ];
+        return;
+      }
       const cleanCep = cep.replace(/\D/g, "");
 
       if (cleanCep.length !== 8) {
@@ -424,69 +452,65 @@ Motivo:
         return;
       }
 
-      // Verificar se o token está configurado
-      if (!MELHOR_ENVIO_CONFIG.token) {
-        throw new Error("Token do MelhorEnvio não configurado");
-      }
+      // Calcular quantidade total de produtos
+      const totalQuantity = items.value.reduce(
+        (total, item) => total + item.quantity,
+        0
+      );
+      const totalValue = items.value.reduce(
+        (total, item) => total + item.product.price * item.quantity,
+        0
+      );
 
-      const shippingData = {
-        from: {
-          postal_code: MELHOR_ENVIO_CONFIG.cepOrigem,
-        },
-        to: {
-          postal_code: cleanCep,
-        },
-        products: items.value.map((item) => ({
-          id: item.product.id.toString(),
-          width: 12, // Configurar dimensões reais do produto
-          height: 4,
-          length: 17,
-          weight: 0.5,
-          insurance_value: item.product.price * item.quantity,
-          quantity: item.quantity,
-        })),
+      // Enviar dados simplificados - apenas quantidade e valor total
+      const requestData = {
+        cep: cleanCep,
+        products: [
+          {
+            id: "package-camisas",
+            quantity: totalQuantity,
+            insurance_value: totalValue,
+          },
+        ],
       };
 
-      //console.log("Enviando dados para MelhorEnvio:", shippingData);
-
+      // Fazendo requisição para API Gateway + Lambda
       const response = await fetch(
-        `${MELHOR_ENVIO_CONFIG.baseUrl}/shipment/calculate`,
+        `https://2c3i1rmf99.execute-api.us-east-1.amazonaws.com/develop/calculate-shipping`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${MELHOR_ENVIO_CONFIG.token}`,
-            "User-Agent": MELHOR_ENVIO_CONFIG.userAgent,
           },
-          body: JSON.stringify(shippingData),
+          body: JSON.stringify(requestData),
         }
       );
 
-      //    console.log("Resposta da API:", response.status);
-
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        //console.error('Erro da API MelhorEnvio:', errorData);
-        throw new Error(
-          `Erro ${response.status}: ${errorData.message || "Erro na API"}`
-        );
+        throw new Error(errorData.error || "Erro na requisição");
       }
 
-      const data = await response.json();
-      //console.log("Dados retornados:", data);
+      const result = await response.json();
+
+      // Verificar se a resposta tem sucesso
+      if (!result.success) {
+        throw new Error(result.error || "Erro na resposta da API");
+      }
+
+      const data = result.data;
 
       // Processar resposta
       const processedOptions: ShippingOption[] = data.map((option: any) => ({
         id: option.service_id || option.id || "unknown",
         name: `${option.company?.name || "Transportadora"} - ${option.name}`,
         price: parseFloat(option.price || option.custom_price || "0"),
-        delivery_time: parseInt(option.delivery_time || "0"),
+        //delivery_time: parseInt(option.delivery_time || "0"),
         company: option.company?.name || "Transportadora",
       }));
 
       const validOptions = processedOptions.filter(
-        (option) => option.price > 0 && option.delivery_time > 0
+        (option) => option.price > 0
       );
 
       if (validOptions.length === 0) {
@@ -504,30 +528,32 @@ Motivo:
         ? sedexOption.id
         : validOptions[0].id;
 
-      toast.success("Frete calculado com sucesso!");
+      //toast.success("Frete calculado com sucesso!");
     } catch (error) {
-      //console.error('Erro ao calcular frete:', error);
+      //console.error("Erro ao calcular frete:", error);
+
+      // Fallback com valores simulados
       const sedexPrice = shippingAddress.value.cidade == "Salgueiro" ? 0 : 35;
       const pacPrice = shippingAddress.value.cidade == "Salgueiro" ? 0 : 25;
-      // Fallback com valores simulados
+
       shippingOptions.value = [
         {
           id: "sedex",
           name: "Sedex",
           price: sedexPrice,
-          delivery_time: 3,
+          //delivery_time: 3,
           company: "Correios",
         },
         {
           id: "pac",
           name: "PAC",
           price: pacPrice,
-          delivery_time: 7,
+          //delivery_time: 7,
           company: "Correios",
         },
       ];
       selectedShipping.value = "sedex";
-      //toast.warning('Erro na API. Usando valores estimados de frete.');
+      //toast.warning("Erro na API. Usando valores estimados de frete.");
     } finally {
       loadingShipping.value = false;
     }
@@ -575,7 +601,6 @@ Motivo:
         success_url: `${window.location.origin}/sucesso?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${window.location.origin}/carrinho`,
 
-        // Endereço de entrega
         shipping_address: {
           cep: shippingAddress.value.cep,
           logradouro: shippingAddress.value.logradouro,
@@ -584,15 +609,52 @@ Motivo:
           bairro: shippingAddress.value.bairro,
           cidade: shippingAddress.value.cidade,
           estado: shippingAddress.value.estado,
+          // ✅ Endereço formatado completo
+          full_address: `${shippingAddress.value.logradouro}, ${shippingAddress.value.numero}${
+            shippingAddress.value.complemento
+              ? ", " + shippingAddress.value.complemento
+              : ""
+          }, ${shippingAddress.value.bairro}, ${shippingAddress.value.cidade} - ${shippingAddress.value.estado}, CEP: ${shippingAddress.value.cep}`,
+        },
+
+        // ✅ Endereço de cobrança (mesmo que entrega por padrão)
+        billing_address: {
+          cep: shippingAddress.value.cep,
+          logradouro: shippingAddress.value.logradouro,
+          numero: shippingAddress.value.numero,
+          complemento: shippingAddress.value.complemento,
+          bairro: shippingAddress.value.bairro,
+          cidade: shippingAddress.value.cidade,
+          estado: shippingAddress.value.estado,
+          full_address: `${shippingAddress.value.logradouro}, ${shippingAddress.value.numero}${
+            shippingAddress.value.complemento
+              ? ", " + shippingAddress.value.complemento
+              : ""
+          }, ${shippingAddress.value.bairro}, ${shippingAddress.value.cidade} - ${shippingAddress.value.estado}, CEP: ${shippingAddress.value.cep}`,
         },
 
         // Informações de frete
         shipping: {
           option_id: selectedShipping.value,
           option_name: selectedShippingOption.value?.name,
-          cost: shippingCost.value * 100, // Converter para centavos
-          delivery_time: selectedShippingOption.value?.delivery_time,
+          cost: shippingCost.value * 100,
+          //delivery_time: selectedShippingOption.value?.delivery_time,
           company: selectedShippingOption.value?.company,
+          // ✅ Endereço de entrega no shipping também
+          delivery_address: {
+            street: shippingAddress.value.logradouro,
+            number: shippingAddress.value.numero,
+            complement: shippingAddress.value.complemento,
+            neighborhood: shippingAddress.value.bairro,
+            city: shippingAddress.value.cidade,
+            state: shippingAddress.value.estado,
+            postal_code: shippingAddress.value.cep,
+            formatted: `${shippingAddress.value.logradouro}, ${shippingAddress.value.numero}${
+              shippingAddress.value.complemento
+                ? ", " + shippingAddress.value.complemento
+                : ""
+            }, ${shippingAddress.value.bairro}, ${shippingAddress.value.cidade} - ${shippingAddress.value.estado}, CEP: ${shippingAddress.value.cep}`,
+          },
         },
 
         // LINHA DE ITENS ÚNICOS (Stripe line_items)
@@ -608,6 +670,11 @@ Motivo:
                 metadata: {
                   product_id: item.product.id.toString(),
                   product_type: item.product.type,
+                  size: item.size || "",
+                  delivery_cep: shippingAddress.value.cep,
+                  delivery_city: shippingAddress.value.cidade,
+                  delivery_state: shippingAddress.value.estado,
+                  delivery_address: `${shippingAddress.value.logradouro}, ${shippingAddress.value.numero}`,
                 },
               },
               unit_amount: Math.round(item.product.price * 100), // Centavos
@@ -648,13 +715,22 @@ Motivo:
               currency: "brl",
               product_data: {
                 name: `Frete - ${selectedShippingOption.value?.name}`,
-                description: `Entrega em ${selectedShippingOption.value?.delivery_time} dias úteis`,
+                //description: `Entrega em ${selectedShippingOption.value?.delivery_time} dias úteis para ${shippingAddress.value.cidade} - ${shippingAddress.value.estado}`,
                 metadata: {
                   is_shipping: "true",
                   shipping_option_id: selectedShipping.value,
-                  delivery_time:
-                    selectedShippingOption.value?.delivery_time?.toString() ||
-                    "0",
+                  //delivery_time: selectedShippingOption.value?.delivery_time?.toString() || "0",
+                  // ✅ Detalhes completos do endereço de entrega
+                  shipping_cep: shippingAddress.value.cep,
+                  shipping_street: shippingAddress.value.logradouro,
+                  shipping_number: shippingAddress.value.numero,
+                  shipping_complement: shippingAddress.value.complemento,
+                  shipping_neighborhood: shippingAddress.value.bairro,
+                  shipping_city: shippingAddress.value.cidade,
+                  shipping_state: shippingAddress.value.estado,
+                  shipping_full_address: formatFullAddress(
+                    shippingAddress.value
+                  ),
                 },
               },
               unit_amount: Math.round(shippingCost.value * 100),
@@ -714,7 +790,21 @@ Motivo:
           has_donation: donationChecked.value.toString(),
           has_membership: membershipChecked.value.toString(),
           total_amount: Math.round(total.value * 100).toString(),
+
+          // ✅ Endereço completo nos metadados principais
           shipping_cep: shippingAddress.value.cep,
+          shipping_street: shippingAddress.value.logradouro,
+          shipping_number: shippingAddress.value.numero,
+          shipping_complement: shippingAddress.value.complemento || "",
+          shipping_neighborhood: shippingAddress.value.bairro,
+          shipping_city: shippingAddress.value.cidade,
+          shipping_state: shippingAddress.value.estado,
+          shipping_full_address: `${shippingAddress.value.logradouro}, ${shippingAddress.value.numero}${
+            shippingAddress.value.complemento
+              ? ", " + shippingAddress.value.complemento
+              : ""
+          }, ${shippingAddress.value.bairro}, ${shippingAddress.value.cidade} - ${shippingAddress.value.estado}, CEP: ${shippingAddress.value.cep}`,
+
           created_at: new Date().toISOString(),
         },
 
@@ -745,13 +835,36 @@ Motivo:
               membership: membershipValue.value,
               total: total.value,
             },
+            // ✅ Informações adicionais de entrega
+            delivery_info: {
+              full_address: `${shippingAddress.value.logradouro}, ${shippingAddress.value.numero}${
+                shippingAddress.value.complemento
+                  ? ", " + shippingAddress.value.complemento
+                  : ""
+              }, ${shippingAddress.value.bairro}, ${shippingAddress.value.cidade} - ${shippingAddress.value.estado}`,
+              postal_code: shippingAddress.value.cep,
+              // estimated_delivery: selectedShippingOption.value?.delivery_time
+              //   ? new Date(
+              //       Date.now() +
+              //         selectedShippingOption.value.delivery_time *
+              //           24 *
+              //           60 *
+              //           60 *
+              //           1000
+              //     ).toISOString()
+              //   : null,
+              shipping_method: selectedShippingOption.value?.name,
+              shipping_company: selectedShippingOption.value?.company,
+            },
           },
         },
       };
 
-      console.log("Enviando payload para Stripe Checkout:", checkoutPayload);
+      console.log(
+        "Enviando payload para Stripe Checkout:",
+        JSON.stringify(checkoutPayload, null, 2)
+      );
 
-      // Enviar para o backend
       const response = await fetch(
         "https://2c3i1rmf99.execute-api.us-east-1.amazonaws.com/develop/stripe/checkout",
         {
@@ -782,7 +895,20 @@ Motivo:
       loading.value = false;
     }
   };
+  const formatFullAddress = (address: ShippingAddress): string => {
+    const parts = [
+      address.logradouro,
+      address.numero,
+      address.complemento,
+      address.bairro,
+      address.cidade,
+      address.estado,
+    ].filter(Boolean);
 
+    return `${parts.slice(0, 2).join(", ")}${
+      address.complemento ? ", " + address.complemento : ""
+    }, ${address.bairro}, ${address.cidade} - ${address.estado}, CEP: ${address.cep}`;
+  };
   // Nova função para tratar resposta do backend
   const handleCheckoutResponse = async (checkoutResult: any) => {
     try {
@@ -881,7 +1007,7 @@ Motivo:
   const validateShippingAddress = (): string[] => {
     const errors: string[] = [];
 
-    // Validar CEP
+    // Validações existentes...
     if (!shippingAddress.value.cep || shippingAddress.value.cep.trim() === "") {
       errors.push("CEP é obrigatório");
     } else {
@@ -891,7 +1017,6 @@ Motivo:
       }
     }
 
-    // Validar logradouro
     if (
       !shippingAddress.value.logradouro ||
       shippingAddress.value.logradouro.trim() === ""
@@ -899,7 +1024,6 @@ Motivo:
       errors.push("Logradouro é obrigatório");
     }
 
-    // Validar número
     if (
       !shippingAddress.value.numero ||
       shippingAddress.value.numero.trim() === ""
@@ -907,7 +1031,6 @@ Motivo:
       errors.push("Número é obrigatório");
     }
 
-    // Validar bairro
     if (
       !shippingAddress.value.bairro ||
       shippingAddress.value.bairro.trim() === ""
@@ -915,12 +1038,19 @@ Motivo:
       errors.push("Bairro é obrigatório");
     }
 
-    // Validar cidade
     if (
       !shippingAddress.value.cidade ||
       shippingAddress.value.cidade.trim() === ""
     ) {
       errors.push("Cidade é obrigatória");
+    }
+
+    // ✅ Validação adicional de estado
+    if (
+      !shippingAddress.value.estado ||
+      shippingAddress.value.estado.trim() === ""
+    ) {
+      errors.push("Estado é obrigatório");
     }
 
     return errors;

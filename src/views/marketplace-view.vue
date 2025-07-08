@@ -29,6 +29,17 @@
                 <span class="product-price">R$ {{ formatPrice(cartStore.mainProduct.price) }}</span>
               </div>
             </div>
+            <div class="col-auto mt-2 mb-2">
+              <div class="product-size-selector text-right ms-auto">
+                <span class="size-selector-label me-3">Tamanho</span>
+                <div class="size-buttons-container">
+                  <button v-for="size in availableSizes" :key="size" @click="selectedSize = size"
+                    :class="['size-btn', { 'size-btn-selected': selectedSize === size }]">
+                    {{ size }}
+                  </button>
+                </div>
+              </div>
+            </div>
             <div class="row product-button-group">
               <div class="col-12 col-md-6 mb-4 mb-md-0">
                 <router-link to="/produto/camisa-oficial-salgueiro" class="chronus-btn chronus-btn-view-product">Ver
@@ -43,13 +54,31 @@
             </div>
           </div>
         </div>
+        <div class="col-12 col-md-4">
+          <div class="product">
+            <div class="product-img"><img class="img-fluid" src="@/assets/camisa_esgotada.png"></div><span
+              data-v-5f21920b="" class="product-name">Lote 1: Camisa Oficial Salgueiro A.C. 2025</span><span
+              data-v-5f21920b="" class="product-type">Camisa Oficial</span>
+            <div class="row">
+              <div class="col-6"><span class="product-category">Futebol</span><span
+                  class="product-quantity">0/100</span>
+              </div>
+              <div class="col-6"><span class="product-discount"></span><span class="product-price">R$ 99,90</span></div>
+            </div>
+            <div class="row product-button-group">
+              <div class="col-12 col-md-6 mb-4 mb-md-0 m-auto"><a data-v-5f21920b="" href="#"
+                  class="chronus-btn chronus-btn-view-product">Esgotado</a>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { MaterialSymbol } from "@chronus-sports/styleguide"
 import { useCartStore } from '@/stores'
 import defaultProductImage from '@/assets/camisa3.png'
@@ -61,18 +90,21 @@ onMounted(async () => {
 
 const addToCart = () => {
   if (cartStore.mainProduct) {
-    cartStore.addToCart(cartStore.mainProduct, 1)
+    cartStore.addToCart(cartStore.mainProduct, 1, selectedSize.value)
   }
 }
+const selectedSize = ref('')
+const availableSizes = ['PP', 'P', 'M', 'G', 'XG', 'XXG']
+
 const formatPrice = (price: any): string => {
   // Converter para número se for string
   const numPrice = typeof price === 'string' ? parseFloat(price) : price
-  
+
   // Verificar se é um número válido
   if (isNaN(numPrice) || numPrice === null || numPrice === undefined) {
     return '0,00'
   }
-  
+
   return numPrice.toFixed(2).replace('.', ',')
 }
 </script>
@@ -80,9 +112,11 @@ const formatPrice = (price: any): string => {
 <!-- Seus estilos existentes permanecem iguais -->
 <style scoped>
 .products-list {}
-.product-img{
+
+.product-img {
   margin-bottom: 1.5rem;
 }
+
 .product-button-group {
   margin-top: 1.5rem;
 }
@@ -147,7 +181,7 @@ const formatPrice = (price: any): string => {
   transition: opacity .3s;
 }
 
-.chronus-btn:hover{
+.chronus-btn:hover {
   opacity: 1;
 }
 
@@ -189,5 +223,61 @@ const formatPrice = (price: any): string => {
   margin-right: .5rem;
   font-size: 1.25rem;
   vertical-align: text-bottom;
+}
+
+.size-selector-label {
+  font-size: .875rem;
+  color: #FFF;
+  font-weight: 700;
+}
+
+.size-buttons-container {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.size-btn {
+  min-width: 45px;
+  height: 45px;
+  border: 2px solid #666;
+  background: transparent;
+  color: #FFF;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.size-btn:hover {
+  border-color: #00E4FF;
+  background: rgba(0, 228, 255, 0.1);
+}
+
+.size-btn-selected {
+  border-color: #00E4FF;
+  background: #00E4FF;
+  color: #000;
+}
+
+.product-size-selector {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+}
+
+@media (max-width: 768px) {
+  .size-buttons-container {
+    justify-content: center;
+  }
+
+  .product-quantity-selector,
+  .product-size-selector {
+    margin-bottom: 1rem;
+  }
 }
 </style>

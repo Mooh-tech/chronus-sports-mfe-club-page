@@ -1,5 +1,5 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import MainView from '../views/main-view.vue';
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import MainView from "../views/main-view.vue";
 import TestView from "../views/test-view.vue";
 import MarketPlaceView from "../views/marketplace-view.vue";
 import ProductView from "../views/product-view.vue";
@@ -49,10 +49,18 @@ const routes: Array<RouteRecordRaw> = [
     name: "carrinho",
     component: CartView,
   },
+  {
+    path: "/sucesso",
+    name: "success",
+    component: () => import("@/views/success-view.vue"),
+    meta: {
+      title: "Pagamento Aprovado - Chronus Sports",
+    },
+  },
 ];
 
 const router = createRouter({
-  history: createWebHistory('/'), // ✅ Garantir que está correto
+  history: createWebHistory("/"), // ✅ Garantir que está correto
   routes,
 });
 

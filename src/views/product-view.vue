@@ -46,6 +46,20 @@
                 </button>
               </div>
             </div>
+
+          </div>
+          <div class="col-12 col-md-8">
+            <div class="product-size-selector text-right">
+              <span class="size-selector-label me-3">Tamanho</span>
+              <div class="size-buttons-container">
+                <button v-for="size in availableSizes" :key="size" @click="selectedSize = size"
+                  :class="['size-btn', { 'size-btn-selected': selectedSize === size }]">
+                  {{ size }}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
             <button @click="buyNow" class="chronus-btn chronus-btn-view-product">Comprar</button>
           </div>
         </div>
@@ -66,10 +80,12 @@ const router = useRouter()
 const cartStore = useCartStore()
 
 const count = ref(1)
+const selectedSize = ref('')
 
 const formattedCount = computed(() => {
   return count.value.toString().padStart(2, '0')
 })
+const availableSizes = ['PP', 'P', 'M', 'G', 'XG', 'XXG']
 
 const increment = () => {
   if (count.value < 5) {
@@ -89,10 +105,10 @@ const sanitizeDescription = (description?: string): string => {
 
   // Lista de tags HTML permitidas (whitelist)
   const allowedTags = ['strong', 'b', 'em', 'i', 'u', 'br', 'p', 'span']
-  
+
   // Regex para remover tags não permitidas
   const tagRegex = /<\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*>/g
-  
+
   // Sanitizar o HTML removendo tags não permitidas
   const sanitized = description.replace(tagRegex, (match, tagName) => {
     if (allowedTags.includes(tagName.toLowerCase())) {
@@ -110,7 +126,7 @@ const sanitizeDescription = (description?: string): string => {
 }
 const buyNow = async () => {
   if (cartStore.mainProduct) {
-    const success = cartStore.addToCart(cartStore.mainProduct, count.value)
+    const success = cartStore.addToCart(cartStore.mainProduct, count.value, selectedSize.value)
     if (success) {
       router.push('/carrinho')
     }
@@ -188,9 +204,10 @@ onMounted(async () => {
   font-weight: 700;
   margin-right: 1rem;
 }
-.product-quantity-selector{
+.product-quantity-selector {
   margin-bottom: 2rem;
 }
+
 .chronus-btn {
   font-family: 'Inter';
   font-weight: 700;
@@ -206,7 +223,7 @@ onMounted(async () => {
   transition: opacity .3s;
 }
 
-.chronus-btn:hover{
+.chronus-btn:hover {
   opacity: 1;
 }
 
@@ -216,6 +233,7 @@ onMounted(async () => {
   width: 100%;
 
 }
+
 .counter-container {
   display: inline-flex;
   align-items: center;
@@ -253,11 +271,65 @@ onMounted(async () => {
 }
 
 .counter-display {
-color: #ffffff;
+  color: #ffffff;
   font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.5;
   text-align: center;
   flex: 1;
+}
+.size-selector-label {
+  font-size: .875rem;
+  color: #FFF;
+  font-weight: 700;
+}
+
+.size-buttons-container {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.size-btn {
+  min-width: 45px;
+  height: 45px;
+  border: 2px solid #666;
+  background: transparent;
+  color: #FFF;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.size-btn:hover {
+  border-color: #00E4FF;
+  background: rgba(0, 228, 255, 0.1);
+}
+
+.size-btn-selected {
+  border-color: #00E4FF;
+  background: #00E4FF;
+  color: #000;
+}
+
+.product-size-selector {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .size-buttons-container {
+    justify-content: center;
+  }
+
+  .product-quantity-selector,
+  .product-size-selector {
+    margin-bottom: 1rem;
+  }
 }
 </style>
