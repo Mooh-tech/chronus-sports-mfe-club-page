@@ -87,7 +87,7 @@
   position: relative;
   z-index: 1;
   margin: auto;
-    max-width: 500px;
+  width: 500px;
 }
 @media screen and (max-width: 991px){
   .cheearleader-numbers h1,
