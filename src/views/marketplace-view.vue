@@ -15,7 +15,11 @@
             <div class="product-img">
               <img class="img-fluid" :src="cartStore.mainProduct.image || defaultProductImage">
             </div>
-            <span class="product-name">{{ cartStore.mainProduct.name }}</span>
+            <span class="product-name">
+              <span class="product-name-label">
+                PRÉ-VENDA
+              </span>
+              {{ cartStore.mainProduct.name }}</span>
             <span class="product-type">{{ cartStore.mainProduct.type }}</span>
             <div class="row">
               <div class="col-6">
@@ -111,6 +115,15 @@ const formatPrice = (price: any): string => {
 
 <!-- Seus estilos existentes permanecem iguais -->
 <style scoped>
+.product-name-label {
+  background: #4F25CC;
+  font-weight: bold;
+  padding: .25rem .5rem;
+  margin-right: .5rem;
+  text-align: center;
+  border-radius: .5rem;
+  font-size: .875rem;
+}
 .products-list {}
 
 .product-img {
