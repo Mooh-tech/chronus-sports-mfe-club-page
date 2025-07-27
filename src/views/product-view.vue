@@ -19,9 +19,17 @@
         </span>
         <div class="row">
           <div class="col-12 col-md-8">
-            <span class="product-name text-center text-md-start">{{ cartStore.mainProduct.name }}</span>
-            <span class="product-quantity text-center text-md-start">{{ cartStore.mainProduct.stock }}/{{
-              cartStore.mainProduct.stock }}</span>
+            <span class="product-name-label">
+              PRÉ-VENDA
+            </span>
+            <span class="product-name text-center text-md-start">
+
+              {{ cartStore.mainProduct.name }}
+            </span>
+            <span class="product-quantity text-center text-md-start">
+
+              {{ cartStore.mainProduct.stock }}/{{
+                cartStore.mainProduct.total_quantity }}</span>
           </div>
           <div class="col-12 col-md-4">
             <span class="product-price text-center text-md-end mt-4 mt-md-0">{{
@@ -138,6 +146,15 @@ onMounted(async () => {
 })
 </script>
 <style scoped>
+.product-name-label {
+  background: #4F25CC;
+  font-weight: bold;
+  padding: .25rem .5rem;
+  margin-right: .5rem;
+  text-align: center;
+  border-radius: .5rem;
+  font-size: 1.2rem;
+}
 .product-seller {
   display: block;
   margin-bottom: .75rem;
@@ -175,7 +192,6 @@ onMounted(async () => {
   line-height: 1.5;
   color: #A1A2B3;
   display: block;
-  margin-top: -.5rem;
 
 }
 

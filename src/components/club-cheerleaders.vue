@@ -1,7 +1,7 @@
 <template>
   <div class="row m-auto club-cheerleaders mt-5">
     <div class="col-12 col-md-5 mb-3 text-center shirt">
-      <img src="@/assets/camisa.png" class="img-fluid"/>
+      <img src="@/assets/camisa2.png" class="img-fluid" />
     </div>
     <div class="col-12 col-md-7 mb-3">
       <h1 class="cheerleaders-header">NOSSA TORCIDA</h1>
@@ -86,6 +86,8 @@
 .shirt img{
   position: relative;
   z-index: 1;
+  margin: auto;
+    max-width: 500px;
 }
 @media screen and (max-width: 991px){
   .cheearleader-numbers h1,

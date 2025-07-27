@@ -637,7 +637,7 @@ Motivo:
         shipping: {
           option_id: selectedShipping.value,
           option_name: selectedShippingOption.value?.name,
-          cost: shippingCost.value * 100,
+          cost: Math.round(shippingCost.value * 100).toString(),
           //delivery_time: selectedShippingOption.value?.delivery_time,
           company: selectedShippingOption.value?.company,
           // ✅ Endereço de entrega no shipping também
@@ -708,35 +708,6 @@ Motivo:
                 },
               ]
             : []),
-
-          // Frete como item de linha
-          {
-            price_data: {
-              currency: "brl",
-              product_data: {
-                name: `Frete - ${selectedShippingOption.value?.name}`,
-                //description: `Entrega em ${selectedShippingOption.value?.delivery_time} dias úteis para ${shippingAddress.value.cidade} - ${shippingAddress.value.estado}`,
-                metadata: {
-                  is_shipping: "true",
-                  shipping_option_id: selectedShipping.value,
-                  //delivery_time: selectedShippingOption.value?.delivery_time?.toString() || "0",
-                  // ✅ Detalhes completos do endereço de entrega
-                  shipping_cep: shippingAddress.value.cep,
-                  shipping_street: shippingAddress.value.logradouro,
-                  shipping_number: shippingAddress.value.numero,
-                  shipping_complement: shippingAddress.value.complemento,
-                  shipping_neighborhood: shippingAddress.value.bairro,
-                  shipping_city: shippingAddress.value.cidade,
-                  shipping_state: shippingAddress.value.estado,
-                  shipping_full_address: formatFullAddress(
-                    shippingAddress.value
-                  ),
-                },
-              },
-              unit_amount: Math.round(shippingCost.value * 100),
-            },
-            quantity: 1,
-          },
         ],
 
         // DADOS DE ASSINATURA (se houver sócio torcedor)
@@ -860,11 +831,6 @@ Motivo:
         },
       };
 
-      console.log(
-        "Enviando payload para Stripe Checkout:",
-        JSON.stringify(checkoutPayload, null, 2)
-      );
-
       const response = await fetch(
         "https://2c3i1rmf99.execute-api.us-east-1.amazonaws.com/develop/stripe/checkout",
         {
@@ -883,9 +849,8 @@ Motivo:
       }
 
       const checkoutResult = await response.json();
-      console.log("Resposta do backend:", checkoutResult);
 
-      // Processar resposta do backend
+      //Processar resposta do backend
       return await handleCheckoutResponse(checkoutResult);
     } catch (error: any) {
       console.error("Erro no checkout:", error);
@@ -913,7 +878,6 @@ Motivo:
   const handleCheckoutResponse = async (checkoutResult: any) => {
     try {
       // Caso 1: Stripe Checkout Session criada com sucesso
-      console.log(checkoutResult);
       if (checkoutResult.checkout_session.url) {
         toast.success("Redirecionando para pagamento...");
 
