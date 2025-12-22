@@ -61,6 +61,24 @@
         <div class="col-12 col-md-4">
           <div class="product">
             <div class="product-img"><img class="img-fluid" src="@/assets/camisa_esgotada.png"></div><span
+              data-v-5f21920b="" class="product-name">Lote 2: Camisa Oficial Salgueiro A.C. 2025</span><span
+              data-v-5f21920b="" class="product-type">Camisa Oficial</span>
+            <div class="row">
+              <div class="col-6"><span class="product-category">Futebol</span><span
+                  class="product-quantity">0/100</span>
+              </div>
+              <div class="col-6"><span class="product-discount"></span><span class="product-price">R$ 99,90</span></div>
+            </div>
+            <div class="row product-button-group">
+              <div class="col-12 col-md-6 mb-4 mb-md-0 m-auto"><a data-v-5f21920b="" href="#"
+                  class="chronus-btn chronus-btn-view-product">Esgotado</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="product">
+            <div class="product-img"><img class="img-fluid" src="@/assets/camisa_esgotada.png"></div><span
               data-v-5f21920b="" class="product-name">Lote 1: Camisa Oficial Salgueiro A.C. 2025</span><span
               data-v-5f21920b="" class="product-type">Camisa Oficial</span>
             <div class="row">
